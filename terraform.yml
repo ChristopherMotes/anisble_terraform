@@ -10,17 +10,30 @@
       msg: "You must defined either bucketName or planFile"
 
   - name: "Create and Execute plan. Skipped if bucketName is not defined"
-    when: bucketName is defined
+    when: bucketName is defined and planFile is not defined
     environment:
       TF_VAR_bucketName : "{{bucketName}}"
       TF_VAR_environment : "{{Environment}}"
     terraform:
       project_path: "/home/ec2-user/environment/terraform"
       state: present
+      lock: true
 
   - name: "Execute plan file. Skipped in planFile not defined"
-    when: planFile is defined
+    when: planFile is defined and bucketName is not defined
     terraform:
       project_path: "/home/ec2-user/environment/terraform"
       state: present
       plan_file: "{{planFile}}"
+      lock: true
+
+  - name: "Create plan file plan file. Skipped in planFile and bucketName not defined"
+    when: planFile is defined and bucketName is defined
+    environment:
+      TF_VAR_bucketName : "{{bucketName}}"
+      TF_VAR_environment : "{{Environment}}"
+    terraform:
+      project_path: "/home/ec2-user/environment/terraform"
+      state: planned
+      plan_file: "{{planFile}}"
+      lock: true
