@@ -4,6 +4,11 @@
     Environment : "development"
    
   tasks:
+  - name: Variable check
+    when: bucketName is not defined and planFile is not defined
+    fail:
+      msg: "You must defined either bucketName or planFile"
+
   - name: "Create and Execute plan. Skipped if bucketName is not defined"
     when: bucketName is defined
     environment:
