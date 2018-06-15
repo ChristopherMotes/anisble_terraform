@@ -9,6 +9,11 @@
     fail: 
       msg: "You must define a base bucket name. .motes.net will be added"
 
+  - name: bucketName not defined
+    when: bucketName is not defined and planFile is not defined
+    fail: 
+      msg: "You must specify bucketName to create a new plan, or specify a planFile" 
+
   - name: Create and execute plan file
     when: bucketName is defined
     environment:
@@ -17,3 +22,10 @@
     terraform:
       project_path: "/home/ec2-user/environment/terraform"
       state: present
+
+  - name: Execute plan file
+    when: planFile is defined
+    terraform:
+      project_path: "/home/ec2-user/environment/terraform"
+      state: present
+      plan_file: "{{planFile}}"
