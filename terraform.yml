@@ -1,0 +1,13 @@
+---
+- hosts: 127.0.0.1
+  vars: 
+    environment : "development"
+   
+  tasks:
+  - name: The main terraform
+    environment:
+      TF_VAR_bucketName : "{{bucketName}}"
+      TF_VAR_environment : "{{environment}}"
+    terraform:
+      project_path: "/home/ec2-user/environment/terraform"
+      state: present
