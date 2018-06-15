@@ -2,13 +2,19 @@
 - hosts: 127.0.0.1
   vars: 
     Environment : "development"
+    projectPath : "/home/ec2-user/environment/terraform"
    
   tasks:
   - name: Variable check
     when: bucketName is not defined and planFile is not defined
     fail:
       msg: "You must defined either bucketName or planFile"
-
+  - name: create the backend file
+    when: bucketName is defined
+    template:
+      src: templates/backend.j2
+      dest: "{{projectPath}}/backend.tf"
+                  
   - name: "Create and Execute plan. Skipped if bucketName is not defined"
     when: bucketName is defined and planFile is not defined
     environment:
@@ -18,6 +24,8 @@
       project_path: "/home/ec2-user/environment/terraform"
       state: present
       lock: true
+      force_init: yes
+
 
   - name: "Execute plan file. Skipped in planFile not defined"
     when: planFile is defined and bucketName is not defined
@@ -36,4 +44,5 @@
       project_path: "/home/ec2-user/environment/terraform"
       state: planned
       plan_file: "{{planFile}}"
+      force_init: true
       lock: true
