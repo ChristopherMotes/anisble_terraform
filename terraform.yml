@@ -1,13 +1,18 @@
 ---
 - hosts: 127.0.0.1
   vars: 
-    environment : "development"
+    Environment : "development"
    
   tasks:
+  - name: bucketName not defined
+    when: bucketName is not defined
+    fail: 
+      msg: "You must define a base bucket name. .motes.net will be added"
+
   - name: The main terraform
     environment:
       TF_VAR_bucketName : "{{bucketName}}"
-      TF_VAR_environment : "{{environment}}"
+      TF_VAR_environment : "{{Environment}}"
     terraform:
       project_path: "/home/ec2-user/environment/terraform"
       state: present
