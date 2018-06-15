@@ -22,5 +22,5 @@
     when: planFile is defined
     terraform:
       project_path: "/home/ec2-user/environment/terraform"
-      state: planned
+      state: present
       plan_file: "{{planFile}}"
