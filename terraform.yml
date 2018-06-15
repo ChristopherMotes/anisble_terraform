@@ -4,17 +4,7 @@
     Environment : "development"
    
   tasks:
-  - name: bucketName not defined
-    when: bucketName is not defined and planFile is defined
-    fail: 
-      msg: "You must define a base bucket name. .motes.net will be added"
-
-  - name: bucketName not defined
-    when: bucketName is not defined and planFile is not defined
-    fail: 
-      msg: "You must specify bucketName to create a new plan, or specify a planFile" 
-
-  - name: Create and execute plan file
+  - name: "Create and Execute plan. Skipped if bucketName is not defined"
     when: bucketName is defined
     environment:
       TF_VAR_bucketName : "{{bucketName}}"
@@ -23,9 +13,9 @@
       project_path: "/home/ec2-user/environment/terraform"
       state: present
 
-  - name: Execute plan file
+  - name: "Execute plan file. Skipped in planFile not defined"
     when: planFile is defined
     terraform:
       project_path: "/home/ec2-user/environment/terraform"
-      state: present
+      state: planned
       plan_file: "{{planFile}}"
