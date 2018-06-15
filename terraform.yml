@@ -14,6 +14,12 @@
     template:
       src: templates/backend.j2
       dest: "{{projectPath}}/backend.tf"
+    register: newBackend
+  - name: "manual init because for init doesn't work"
+    shell: terraform init
+    args:
+      chdir: "{{projectPath}}/"
+    when: newBackend.changed
                   
   - name: "Create and Execute plan. Skipped if bucketName is not defined"
     when: bucketName is defined and planFile is not defined
@@ -21,7 +27,7 @@
       TF_VAR_bucketName : "{{bucketName}}"
       TF_VAR_environment : "{{Environment}}"
     terraform:
-      project_path: "/home/ec2-user/environment/terraform"
+      project_path: "{{projectPath}}"
       state: present
       lock: true
 
@@ -29,7 +35,7 @@
   - name: "Execute plan file. Skipped in planFile not defined"
     when: planFile is defined and bucketName is not defined
     terraform:
-      project_path: "/home/ec2-user/environment/terraform"
+      project_path: "{{projectPath}}"
       state: present
       plan_file: "{{planFile}}"
       lock: true
@@ -39,8 +45,6 @@
     environment:
       TF_VAR_bucketName : "{{bucketName}}"
       TF_VAR_environment : "{{Environment}}"
-    terraform:
-      project_path: "/home/ec2-user/environment/terraform"
-      state: planned
-      plan_file: "{{planFile}}"
-      lock: true
+    shell: terraform plan -out "{{planFile}}"
+    args:
+      chdir: "{{projectPath}}/"
