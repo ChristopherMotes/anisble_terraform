@@ -5,11 +5,12 @@
    
   tasks:
   - name: bucketName not defined
-    when: bucketName is not defined
+    when: bucketName is not defined and planFile is defined
     fail: 
       msg: "You must define a base bucket name. .motes.net will be added"
 
-  - name: The main terraform
+  - name: Create and execute plan file
+    when: bucketName is defined
     environment:
       TF_VAR_bucketName : "{{bucketName}}"
       TF_VAR_environment : "{{Environment}}"
