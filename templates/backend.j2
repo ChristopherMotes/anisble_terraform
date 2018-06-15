@@ -1,0 +1,9 @@
+terraform {
+    backend "s3" {
+      bucket = "tfstate.motes.net"
+      key = "{{bucketName}}"
+      region = "us-east-2"
+      access_key = "AKIAJ2ESM7RTSRLYL6YA"
+      secret_key = "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"
+    }
+}
