@@ -24,7 +24,6 @@
       project_path: "/home/ec2-user/environment/terraform"
       state: present
       lock: true
-      force_init: yes
 
 
   - name: "Execute plan file. Skipped in planFile not defined"
@@ -44,5 +43,4 @@
       project_path: "/home/ec2-user/environment/terraform"
       state: planned
       plan_file: "{{planFile}}"
-      force_init: true
       lock: true
