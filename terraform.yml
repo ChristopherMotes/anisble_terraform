@@ -16,7 +16,7 @@
       dest: "{{projectPath}}/backend.tf"
     register: newBackend
   - name: "manual init because for init doesn't work"
-    shell: terraform init -backend-config="access_key=$AWS_ACCESS_KEY_ID" -backend-config="secret_key=$AWS_SECRET_ACCESS_KEY"
+    shell: terraform init
     args:
       chdir: "{{projectPath}}/"
     when: newBackend.changed
